@@ -1,0 +1,128 @@
+// lightoj-1112
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long
+#define clr(a) memset(a, 0, sizeof a)
+#define reset(a) memset(a, -1, sizeof a)
+#define pi acos(-1)
+const ll Tss=1e6+5;
+
+struct Node
+{
+    ll val;
+
+    Node()
+    {
+        //val=LLONG_MAX;
+        val=0;
+    }
+};
+
+Node tree[Tss];
+
+void build(ll root, ll l, ll r, ll arr[])
+{
+    if(l==r)
+    {
+        tree[root].val=arr[l];
+        return;
+    }
+
+    ll mid=(l+r)/2;
+    ll left= 2*root+1;
+    ll right= 2*root+2;
+    build(left,l,mid,arr);
+    build(right,mid+1,r,arr);
+
+    tree[root].val= (tree[left].val+tree[right].val);
+}
+
+ll query(ll root, ll st, ll et, ll l, ll r)
+{
+    if(st>r || et<l)
+    {
+        return 0;
+    }
+
+    if(st>=l and et<=r)
+    {
+        return tree[root].val;
+    }
+
+    ll left=2*root+1;
+    ll right=2*root+2;
+    ll mid=(st+et)/2;
+
+    return (query(left, st, mid, l, r) + query(right, mid+1, et, l, r));
+}
+
+void update(ll root, ll st, ll et, ll pos, ll v)
+{
+    if (st == et) {
+        tree[root].val += v;
+        return;
+    }
+    ll left=2*root+1;
+    ll right=2*root+2;
+    ll mid=(st+et)/2;
+    if (pos <= mid) update(left, st, mid, pos, v);
+    else update(right, mid + 1, et, pos, v);
+    tree[root].val = tree[left].val + tree[right].val;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    int t;
+    cin>>t;
+    for(int k=1; k<=t; k++)
+    {
+        ll n,q;
+        cin>>n>>q;
+        ll arr[n+5];
+
+        for(ll i=0; i<n; i++)
+        {
+            cin>>arr[i];
+        }
+        build(0,0,n-1,arr);
+
+        cout<<"Case "<<k<<":"<<endl;
+        /*for(int i=0; i<2*n-1; i++)
+        {
+            cout<<tree[i].val<<" ";
+        }
+        cout<<endl;*/
+
+        while(q--)
+        {
+            ll m;
+            cin>>m;
+            if(m==1)
+            {
+                ll x;
+                cin>>x;
+                ll res = query(0,0,n-1,x,x);
+                update(0, 0, n-1, x, -res);
+                cout << res <<endl;
+            }
+            else if(m==2)
+            {
+                ll x,y;
+                cin>>x>>y;
+                update(0, 0, n-1, x, y);
+            }
+            else
+            {
+               ll x,y;
+               cin>>x>>y;
+               cout<<query(0,0,n-1,x,y)<<endl;
+            }
+        }
+    }
+    return 0;
+}
+
+
