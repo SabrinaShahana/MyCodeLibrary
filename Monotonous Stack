@@ -1,0 +1,49 @@
+//lightoj-1083
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+int main()
+{
+    int t;
+    cin>>t;
+
+    for(int tc=1; tc<=t; tc++)
+    {
+        ll n;
+        cin>>n;
+
+        ll arr[n+5];
+        for(int i=0; i<n; i++)
+        {
+            scanf("%lld",&arr[i]);
+        }
+        vector<ll> vec;
+        vector<ll> right(n,n);
+        vector<ll> left(n,-1);
+        ll ans=0;
+
+        for(int i=0; i<n; i++)
+        {
+            while(vec.size()>0 and arr[vec.back()]>arr[i])
+            {
+                int last=vec.back();
+                vec.pop_back();
+                right[last]=i;
+            }
+
+            if(vec.size()>0)
+            {
+              left[i]=vec.back();
+            }
+            vec.push_back(i);
+        }
+
+        for(int i=0; i<n; i++)
+        {
+            //cout<<"Left="<<left[i]<<" "<<"Right"<<right[i]<<endl;
+            ans=max(ans,((right[i]-left[i]-1)*arr[i]));
+        }
+        printf("Case %d: %lld\n",tc,ans);
+    }
+    return 0;
+}
