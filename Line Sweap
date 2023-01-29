@@ -1,0 +1,60 @@
+//lightoj-1089
+#include<bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    int t;
+    cin>>t;
+
+    for(int tc=1; tc<=t; tc++)
+    {
+        int n,q;
+        cin>>n>>q;
+
+        vector<tuple<int, int, int>> vec;
+        for(int i=0; i<n; i++)
+        {
+            int st,et;
+            cin>>st>>et;
+            vec.push_back(make_tuple(st,1,i));
+            vec.push_back(make_tuple(et,3,i));
+        }
+        for(int i=0; i<q; i++)
+        {
+            int p;
+            cin>>p;
+            vec.push_back(make_tuple(p,2,i));
+        }
+         sort(vec.begin(), vec.end());
+         int active=0;
+         int arr[q+5];
+         for(int i=0; i<vec.size(); i++)
+        {
+            int st;
+            int type;
+            int id;
+
+            tie(st,type,id)=vec[i];
+            if(type==1)
+            {
+                active++;
+            }
+            else if(type==3)
+            {
+                active--;
+            }
+            else
+            {
+                arr[id]=active;
+            }
+        }
+        cout<<"Case "<<tc<<":"<<endl;
+        for(int i=0; i<q; i++)
+        {
+            cout<<arr[i]<<endl;
+        }
+    }
+
+    return 0;
+}
