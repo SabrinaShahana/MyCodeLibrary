@@ -1,0 +1,79 @@
+//lightoj-1012
+#include<bits/stdc++.h>
+using namespace std;
+
+int dx[]={1,-1,0,0};
+int dy[]={0,0,1,-1};
+int vis[50][50];
+int n,m;
+
+bool isValid(int x, int y)
+{
+   if(x<0 || y<0 || x>=m || y>=n || vis[x][y])
+   {
+       return false;
+   }
+   return true;
+}
+
+void solve(int tt)
+{
+    cin>>n>>m;
+    memset(vis, 0, sizeof(vis));
+    string str[m];
+
+    int posi=0,posj=0;
+
+
+    for(int i=0; i<m; i++)
+    {
+         cin>>str[i];
+        for(int j=0; j<n; j++)
+        {
+            if(str[i][j]=='@')
+            {
+                posi=i;
+                posj=j;
+            }
+        }
+    }
+    int ans=1;
+    list<pair<int,int>> li;
+    li.push_back({posi,posj});
+
+    vis[posi][posj]=1;
+    while(!li.empty())
+    {
+        auto it = li.front();
+        li.pop_front();
+        posi=it.first;
+        posj=it.second;
+
+        for(int i=0; i<4; i++)
+        {
+            int x = posi + dx[i];
+            int y = posj + dy[i];
+
+            if(isValid(x, y) && str[x][y]=='.')
+            {
+                li.push_back({x,y});
+                vis[x][y]=1;
+                ans++;
+            }
+        }
+
+    }
+    cout<<"Case "<<tt<<": "<<ans<<endl;
+}
+
+int main()
+{
+    int t;
+    cin>>t;
+
+    for(int i=1; i<=t; i++)
+    {
+        solve(i);
+    }
+    return 0;
+}
